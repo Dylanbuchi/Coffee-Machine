@@ -2,6 +2,8 @@ package coffee;
 
 import java.util.Scanner;
 
+import java.util.concurrent.TimeUnit;
+
 public class CoffeeMachine {
 
     private static Scanner sc = new Scanner(System.in);
@@ -43,14 +45,15 @@ public class CoffeeMachine {
     private static int cappuccinoMoney = 6;
 
     // main
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws InterruptedException {
+        newLine();
         System.out.println("Welcome to Express Coffee !");
 
         while (!userChoice.equals("exit")) {
-            System.out.println();
 
-            System.out.print("Choose an option (buy, fill, take, remaining or exit): ");
+            newLine();
+
+            System.out.print("Choose an option (buy, fill, take, remaining, calculate or exit): ");
             userChoice = sc.next();
             sc.nextLine();
 
@@ -83,10 +86,27 @@ public class CoffeeMachine {
 
                 // Exit
                 break;
+            case "calculate":
+
+                calculatorOfCoffeeCups();
+
+                // Exit
+                break;
+
+            case "exit":
+
+                // Exit
+                break;
+
+            default:
+                newLine();
+                System.out.print("Please select a valid option!");
+                newLine();
+                break;
             }
         }
 
-        System.out.println();
+        newLine();
         System.out.println("Good Bye!");
     }
 
@@ -122,7 +142,7 @@ public class CoffeeMachine {
     }
 
     public static void coffeeMachine() {
-        System.out.println();
+        newLine();
         System.out.println("The coffee machine has: ");
         System.out.println(water + " of water");
         System.out.println(milk + "  of milk");
@@ -133,27 +153,27 @@ public class CoffeeMachine {
     }
 
     public static void fill() {
-        System.out.println();
+        newLine();
         System.out.println("Write how many ml of water do you want to add: ");
-        System.out.println();
+        newLine();
         addWater = sc.nextInt();
         water += addWater;
 
-        System.out.println();
+        newLine();
         System.out.println("Write how many ml of water do you want to add: ");
-        System.out.println();
+        newLine();
         addMilk = sc.nextInt();
         milk += addMilk;
 
-        System.out.println();
+        newLine();
         System.out.println("Write how many ml of water do you want to add: ");
-        System.out.println();
+        newLine();
         addCoffee = sc.nextInt();
         coffee += addCoffee;
 
-        System.out.println();
+        newLine();
         System.out.println("Write how many ml of water do you want to add: ");
-        System.out.println();
+        newLine();
 
         addCups = sc.nextInt();
         cups += addCups;
@@ -165,7 +185,7 @@ public class CoffeeMachine {
 
         while (!userPass.equals(password)) {
 
-            System.out.println();
+            newLine();
             System.out.println("To take the money you must enter the password or enter \"CANCEL\" to go back: ");
             userPass = sc.nextLine();
 
@@ -173,21 +193,21 @@ public class CoffeeMachine {
                 return;
 
             } else if (!userPass.equals(password)) {
-                System.out.println();
+                newLine();
                 System.out.println("Wrong Password... Please enter the correct password or cancel");
 
             }
         }
-        System.out.println();
+        newLine();
         System.out.println("The coffee machine has $" + money);
 
-        System.out.println();
+        newLine();
         System.out.print("Write \"YES\" to take the money or \"NO\" to go back: ");
         String user = sc.nextLine();
 
         if (user.equals("yes") || user.equals("YES")) {
             money -= money;
-            System.out.println();
+            newLine();
             System.out.println("The machine now has $" + money);
 
         } else {
@@ -196,16 +216,18 @@ public class CoffeeMachine {
 
     }
 
-    public static void buy() {
+    public static void buy() throws InterruptedException {
 
-        System.out.println();
-        System.out.print("Choose your coffee! 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu: ");
+        newLine();
+        System.out.print("Choose your coffee! || [1] Espresso || [2] Latte || [3] Cappuccino || [0] Main Menu: ");
 
         userCoffeeNumber = sc.next();
         if (userCoffeeNumber.equals("1") && canMakeExpress()) {
-            System.out.println();
-            System.out.println("Making you an Expresso! Please wait");
+            newLine();
+            System.out.println("Making you an espresso! Please wait");
             buyOneExpress();
+            newLine();
+            waitingForCoffee();
 
         } else if (userCoffeeNumber.equals("1") && !canMakeExpress()) {
             notEnoughExpressIngredients();
@@ -213,9 +235,11 @@ public class CoffeeMachine {
         }
 
         else if (userCoffeeNumber.equals("2") && canMakeLatte()) {
-            System.out.println();
-            System.out.println("Making you a Latte! Please wait");
+            newLine();
+            System.out.println("Making you a latte! Please wait");
             buyOneLatte();
+            newLine();
+            waitingForCoffee();
 
         } else if (userCoffeeNumber.equals("2") && !canMakeLatte()) {
             notEnoughLatteIngredients();
@@ -223,14 +247,16 @@ public class CoffeeMachine {
         }
 
         else if (userCoffeeNumber.equals("3") && canMakeCappuccino()) {
-            System.out.println();
-            System.out.println("Making you a Cappuccino! Please wait");
+            newLine();
+            System.out.println("Making you a cappuccino! Please wait...");
             buyOneCappuccino();
+            newLine();
+            waitingForCoffee();
 
         } else if (userCoffeeNumber.equals("3") && !canMakeCappuccino()) {
             notEnoughCappuccinoIngredients();
 
-        } else if (userCoffeeNumber.equals("back")) {
+        } else if (userCoffeeNumber.equals("0")) {
             return;
 
         }
@@ -269,15 +295,15 @@ public class CoffeeMachine {
 
     public static void notEnoughExpressIngredients() {
         if (water < expressWater) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, we don't have enough water..");
 
         } else if (coffee < expressCoffee) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, not enough coffee!");
 
         } else if (cups < 1) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, not enough cups!");
         }
 
@@ -285,19 +311,19 @@ public class CoffeeMachine {
 
     public static void notEnoughLatteIngredients() {
         if (water < latteWater) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, we don't have enough water..");
 
         } else if (coffee < latteCoffee) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, not enough coffee!");
 
         } else if (milk < latteMilk) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, not enough milk!");
 
         } else if (cups < 1) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, not enough cups!");
         }
 
@@ -305,21 +331,79 @@ public class CoffeeMachine {
 
     public static void notEnoughCappuccinoIngredients() {
         if (water < cappuccinoWater) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, we don't have enough water..");
 
         } else if (coffee < cappuccinoCoffee) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, not enough coffee!");
 
         } else if (milk < cappuccinoMilk) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, not enough milk!");
         } else if (cups < 1) {
-            System.out.println();
+            newLine();
             System.out.println("Sorry, not enough cups!");
 
         }
+
+    }
+
+    public static void waitingForCoffee() throws InterruptedException {
+        System.out.println("Starting to make your coffee!");
+        newLine();
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Grinding coffee beans...");
+        newLine();
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Boiling water...");
+        newLine();
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Mixing boiled water with crushed coffee beans...");
+        newLine();
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Pouring coffee into the cup...");
+        newLine();
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Pouring some milk into the cup...");
+        newLine();
+        TimeUnit.SECONDS.sleep(3);
+        System.out.println("Coffee is ready!");
+
+    }
+
+    public static void newLine() {
+        System.out.println();
+
+    }
+
+    public static void calculatorOfCoffeeCups() {
+
+        int water = 200;
+        int milk = 50;
+        int coffeeBeans = 15;
+        int cups = 0;
+        // calculation
+
+        // print result
+        newLine();
+        System.out.println("Calculate here how many cups a normal coffee machine can make.");
+        newLine();
+        System.out.print("how many cups of coffee you will need: ");
+        cups = sc.nextInt();
+
+        int waterCalcul = water * cups;
+        int milkCalcul = milk * cups;
+        int coffeeBeansCalcul = coffeeBeans * cups;
+
+        newLine();
+        System.out.println("For " + cups + " cups of coffee you will need: ");
+        newLine();
+        System.out.println(waterCalcul + " ml of water");
+        newLine();
+        System.out.println(milkCalcul + " ml of milk");
+        newLine();
+        System.out.println(coffeeBeansCalcul + " g of coffee beans");
 
     }
 }
