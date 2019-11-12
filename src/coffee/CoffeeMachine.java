@@ -160,19 +160,19 @@ public class CoffeeMachine {
         water += addWater;
 
         newLine();
-        System.out.println("Write how many ml of water do you want to add: ");
+        System.out.println("Write how many ml of milk do you want to add: ");
         newLine();
         addMilk = sc.nextInt();
         milk += addMilk;
 
         newLine();
-        System.out.println("Write how many ml of water do you want to add: ");
+        System.out.println("Write how many beans of coffee do you want to add: ");
         newLine();
         addCoffee = sc.nextInt();
         coffee += addCoffee;
 
         newLine();
-        System.out.println("Write how many ml of water do you want to add: ");
+        System.out.println("Write how many cups do you want to add: ");
         newLine();
 
         addCups = sc.nextInt();
