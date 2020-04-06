@@ -2,408 +2,217 @@ package coffee;
 
 import java.util.Scanner;
 
-import java.util.concurrent.TimeUnit;
+import coffee.model.*;
 
+/**
+ * CoffeeMachine
+ */
 public class CoffeeMachine {
 
-    private static Scanner sc = new Scanner(System.in);
+    private int balance;
+    private int cups;
+    private int water;
+    private int milk;
+    private int coffeeBeans;
+    private String password;
 
-    // password
-    private static String password = "123";
-    // user variables
-    private static int addWater;
-    private static int addMilk;
-    private static int addCoffee;
-    private static int addCups;
-
-    private static String userChoice = "";
-    private static String userCoffeeNumber;
+    private Coffee espresso;
+    private Coffee latte;
+    private Coffee cappuccino;
 
     // Coffee Machine actual State with random numbers
-    private static int money = (int) Math.floor(Math.random() * 10);
-    private static int water = (int) Math.floor(Math.random() * 2000 + 1000);
-    private static int milk = (int) Math.floor(Math.random() * 500 + 100);
-    private static int coffee = (int) Math.floor(Math.random() * 100);
-    private static int cups = (int) Math.floor(Math.random() * 5);
+    public CoffeeMachine() {
 
-    // for a cup of express
+        this.password = "123";
 
-    private static int expressWater = 250;
-    private static int expressCoffee = 16;
-    private static int expressMoney = 4;
-    // for a cup of latte
+        // set prices of 3 coffee inside the machine
+        // a new coffee is (water, milk, coffee, price)
 
-    private static int latteWater = 350;
-    private static int latteMilk = 75;
-    private static int latteCoffee = 20;
-    private static int latteMoney = 7;
-    // for a cup of cappucino
+        this.espresso = new Espresso(250, 0, 16, 4);
+        this.latte = new Latte(350, 75, 20, 7);
+        this.cappuccino = new Cappuccino(200, 100, 12, 6);
 
-    private static int cappuccinoWater = 200;
-    private static int cappuccinoMilk = 100;
-    private static int cappuccinoCoffee = 12;
-    private static int cappuccinoMoney = 6;
+        // add random values to every new machine created
+        this.balance = (int) Math.floor(Math.random() * 10);
+        this.water = (int) Math.floor(Math.random() * 2000 + 1000);
+        this.milk = (int) Math.floor(Math.random() * 500 + 100);
+        this.coffeeBeans = (int) Math.floor(Math.random() * 100);
+        this.cups = (int) Math.floor(Math.random() * 5);
 
-    // main
-    public static void main(String[] args) throws InterruptedException {
-        newLine();
-        System.out.println("Welcome to Express Coffee !");
+    }
 
-        while (!userChoice.equals("exit")) {
+    // check if a machine can make a coffee
+    public boolean CanMakeACupOfCoffee(Coffee coffee) {
+        if (coffeeBeans >= coffee.getCoffeeBeans() && water >= coffee.getWater() && milk >= coffee.getMilk()
+                && cups > 0) {
 
-            newLine();
+            return true;
 
-            System.out.print("Choose an option (buy, fill, take, remaining, calculate or exit): ");
-            userChoice = sc.next();
-            sc.nextLine();
+        }
+        return false;
 
-            // switch statements
-            switch (userChoice) {
+    }
 
-            // BUY
-            case "buy":
-                buy();
+    public boolean isPasswordCorrect(String password) {
 
-                break;
-
-            // FILL
-            case "fill":
-
-                fill();
-
-                break;
-
-            // TAKE
-            case "take":
-
-                take();
-
-                // REmaininig
-                break;
-            case "remaining":
-
-                coffeeMachine();
-
-                // Exit
-                break;
-            case "calculate":
-
-                calculatorOfCoffeeCups();
-
-                // Exit
-                break;
-
-            case "exit":
-
-                // Exit
-                break;
-
-            default:
-                newLine();
-                System.out.print("Please select a valid option!");
-                newLine();
-                break;
-            }
+        if (password.equals(password)) {
+            return true;
         }
 
-        newLine();
-        System.out.println("Good Bye!");
-    }
-
-    // buy a expresso
-    public static void buyOneExpress() {
-
-        water -= expressWater;
-        coffee -= expressCoffee;
-        money += expressMoney;
-        cups -= 1;
+        return false;
 
     }
 
-    // buy a latte
-    public static void buyOneLatte() {
-
-        water -= latteWater;
-        milk -= latteMilk;
-        coffee -= latteCoffee;
-        money += latteMoney;
-        cups -= 1;
-
+    public void takeMoney() {
+        balance -= balance;
     }
 
-    // BUY a cappucciino
-    public static void buyOneCappuccino() {
+    // fill the machine
+    public void fill(Scanner in) {
 
-        water -= cappuccinoWater;
-        milk -= cappuccinoMilk;
-        coffee -= cappuccinoCoffee;
-        money += cappuccinoMoney;
-        cups -= 1;
-    }
-
-    public static void coffeeMachine() {
-        newLine();
-        System.out.println("The coffee machine has: ");
-        System.out.println(water + " of water");
-        System.out.println(milk + "  of milk");
-        System.out.println(coffee + " of coffee beans");
-        System.out.println(cups + " of disposable cups");
-        System.out.println("$" + money + " of money");
-
-    }
-
-    public static void fill() {
-        newLine();
         System.out.println("Write how many ml of water do you want to add: ");
-        newLine();
-        addWater = sc.nextInt();
+
+        int addWater = in.nextInt();
         water += addWater;
 
-        newLine();
         System.out.println("Write how many ml of milk do you want to add: ");
-        newLine();
-        addMilk = sc.nextInt();
+
+        int addMilk = in.nextInt();
         milk += addMilk;
 
-        newLine();
         System.out.println("Write how many beans of coffee do you want to add: ");
-        newLine();
-        addCoffee = sc.nextInt();
-        coffee += addCoffee;
 
-        newLine();
+        int addCoffee = in.nextInt();
+        coffeeBeans += addCoffee;
+
         System.out.println("Write how many cups do you want to add: ");
-        newLine();
 
-        addCups = sc.nextInt();
+        int addCups = in.nextInt();
         cups += addCups;
 
     }
 
-    public static void take() {
-        String userPass = "";
+    // check which ingredient is missing
+    public void ingredients(Coffee coffee) {
+        if (water < coffee.getWater()) {
 
-        while (!userPass.equals(password)) {
-
-            newLine();
-            System.out.println("To take the money you must enter the password or enter \"CANCEL\" to go back: ");
-            userPass = sc.nextLine();
-
-            if (userPass.equals("CANCEL") || userPass.equals("cancel")) {
-                return;
-
-            } else if (!userPass.equals(password)) {
-                newLine();
-                System.out.println("Wrong Password... Please enter the correct password or cancel");
-
-            }
-        }
-        newLine();
-        System.out.println("The coffee machine has $" + money);
-
-        newLine();
-        System.out.print("Write \"YES\" to take the money or \"NO\" to go back: ");
-        String user = sc.nextLine();
-
-        if (user.equals("yes") || user.equals("YES")) {
-            money -= money;
-            newLine();
-            System.out.println("The machine now has $" + money);
-
-        } else {
-            return;
-        }
-
-    }
-
-    public static void buy() throws InterruptedException {
-
-        newLine();
-        System.out.print("Choose your coffee! || [1] Espresso || [2] Latte || [3] Cappuccino || [0] Main Menu: ");
-
-        userCoffeeNumber = sc.next();
-        if (userCoffeeNumber.equals("1") && canMakeExpress()) {
-            newLine();
-            System.out.println("Making you an espresso! Please wait");
-            buyOneExpress();
-            newLine();
-            waitingForCoffee();
-
-        } else if (userCoffeeNumber.equals("1") && !canMakeExpress()) {
-            notEnoughExpressIngredients();
-
-        }
-
-        else if (userCoffeeNumber.equals("2") && canMakeLatte()) {
-            newLine();
-            System.out.println("Making you a latte! Please wait");
-            buyOneLatte();
-            newLine();
-            waitingForCoffee();
-
-        } else if (userCoffeeNumber.equals("2") && !canMakeLatte()) {
-            notEnoughLatteIngredients();
-
-        }
-
-        else if (userCoffeeNumber.equals("3") && canMakeCappuccino()) {
-            newLine();
-            System.out.println("Making you a cappuccino! Please wait...");
-            buyOneCappuccino();
-            newLine();
-            waitingForCoffee();
-
-        } else if (userCoffeeNumber.equals("3") && !canMakeCappuccino()) {
-            notEnoughCappuccinoIngredients();
-
-        } else if (userCoffeeNumber.equals("0")) {
-            return;
-
-        }
-    }
-
-    // IF MACHINE CAN MAKE EXPRESS
-    public static boolean canMakeExpress() {
-        if (coffee >= expressCoffee && water >= expressWater) {
-
-            return true;
-
-        }
-        return false;
-
-    }
-
-    public static boolean canMakeLatte() {
-        if (coffee >= latteCoffee && water >= latteWater && milk >= latteMilk) {
-
-            return true;
-
-        }
-        return false;
-
-    }
-
-    public static boolean canMakeCappuccino() {
-        if (coffee >= cappuccinoCoffee && water >= cappuccinoWater && milk >= cappuccinoMilk) {
-
-            return true;
-
-        }
-        return false;
-
-    }
-
-    public static void notEnoughExpressIngredients() {
-        if (water < expressWater) {
-            newLine();
             System.out.println("Sorry, we don't have enough water..");
 
-        } else if (coffee < expressCoffee) {
-            newLine();
-            System.out.println("Sorry, not enough coffee!");
-
-        } else if (cups < 1) {
-            newLine();
-            System.out.println("Sorry, not enough cups!");
         }
+        if (coffeeBeans < coffee.getCoffeeBeans()) {
 
-    }
+            System.out.println("Sorry, we don't have enough coffee!");
 
-    public static void notEnoughLatteIngredients() {
-        if (water < latteWater) {
-            newLine();
-            System.out.println("Sorry, we don't have enough water..");
+        }
+        if (cups < 1) {
 
-        } else if (coffee < latteCoffee) {
-            newLine();
-            System.out.println("Sorry, not enough coffee!");
+            System.out.println("Sorry, we don't have enough cups!");
+        }
+        if (milk < coffee.getMilk()) {
 
-        } else if (milk < latteMilk) {
-            newLine();
             System.out.println("Sorry, not enough milk!");
 
-        } else if (cups < 1) {
-            newLine();
-            System.out.println("Sorry, not enough cups!");
         }
 
     }
 
-    public static void notEnoughCappuccinoIngredients() {
-        if (water < cappuccinoWater) {
-            newLine();
-            System.out.println("Sorry, we don't have enough water..");
+    // buy a coffee from machine
+    public void buy(Coffee coffee) {
 
-        } else if (coffee < cappuccinoCoffee) {
-            newLine();
-            System.out.println("Sorry, not enough coffee!");
-
-        } else if (milk < cappuccinoMilk) {
-            newLine();
-            System.out.println("Sorry, not enough milk!");
-        } else if (cups < 1) {
-            newLine();
-            System.out.println("Sorry, not enough cups!");
-
+        milk -= coffee.getMilk();
+        water -= coffee.getWater();
+        coffeeBeans -= coffee.getCoffeeBeans();
+        balance += coffee.getPrice();
+        cups--;
+        if (balance < 0) {
+            balance = 0;
         }
-
     }
 
-    public static void waitingForCoffee() throws InterruptedException {
-        System.out.println("Starting to make your coffee!");
-        newLine();
-        TimeUnit.SECONDS.sleep(1);
-        System.out.println("Grinding coffee beans...");
-        newLine();
-        TimeUnit.SECONDS.sleep(1);
-        System.out.println("Boiling water...");
-        newLine();
-        TimeUnit.SECONDS.sleep(1);
-        System.out.println("Mixing boiled water with crushed coffee beans...");
-        newLine();
-        TimeUnit.SECONDS.sleep(1);
-        System.out.println("Pouring coffee into the cup...");
-        newLine();
-        TimeUnit.SECONDS.sleep(1);
-        System.out.println("Pouring some milk into the cup...");
-        newLine();
-        TimeUnit.SECONDS.sleep(3);
-        System.out.println("Coffee is ready!");
-
+    public int getBalance() {
+        return balance;
     }
 
-    public static void newLine() {
-        System.out.println();
-
+    public void setBalance(int money) {
+        this.balance = money;
     }
 
-    public static void calculatorOfCoffeeCups() {
-
-        int water = 200;
-        int milk = 50;
-        int coffeeBeans = 15;
-        int cups = 0;
-        // calculation
-
-        // print result
-        newLine();
-        System.out.println("Calculate here how many cups a normal coffee machine can make.");
-        newLine();
-        System.out.print("how many cups of coffee you will need: ");
-        cups = sc.nextInt();
-
-        int waterCalcul = water * cups;
-        int milkCalcul = milk * cups;
-        int coffeeBeansCalcul = coffeeBeans * cups;
-
-        newLine();
-        System.out.println("For " + cups + " cups of coffee you will need: ");
-        newLine();
-        System.out.println(waterCalcul + " ml of water");
-        newLine();
-        System.out.println(milkCalcul + " ml of milk");
-        newLine();
-        System.out.println(coffeeBeansCalcul + " g of coffee beans");
-
+    public int getCups() {
+        return cups;
     }
+
+    public void setCups(int cups) {
+        this.cups = cups;
+    }
+
+    public int getWater() {
+        return water;
+    }
+
+    public void setWater(int water) {
+        this.water = water;
+    }
+
+    public int getMilk() {
+        return milk;
+    }
+
+    public void setMilk(int milk) {
+        this.milk = milk;
+    }
+
+    public int getCoffeeBeans() {
+        return coffeeBeans;
+    }
+
+    public void setCoffeeBeans(int coffeeBeans) {
+        this.coffeeBeans = coffeeBeans;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+
+        string.append("The coffee machine has: ");
+        string.append(water + " of water \n");
+        string.append(milk + "  of milk \n");
+        string.append(coffeeBeans + " of coffee beans \n");
+        string.append(cups + " of disposable cups\n ");
+        string.append("and $" + balance);
+
+        return string.toString();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Coffee getEspresso() {
+        return espresso;
+    }
+
+    public void setEspresso(Coffee espresso) {
+        this.espresso = espresso;
+    }
+
+    public Coffee getLatte() {
+        return latte;
+    }
+
+    public void setLatte(Coffee latte) {
+        this.latte = latte;
+    }
+
+    public Coffee getCappuccino() {
+        return cappuccino;
+    }
+
+    public void setCappuccino(Coffee cappuccino) {
+        this.cappuccino = cappuccino;
+    }
+
 }

@@ -2,6 +2,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Test",
+            "request": "launch",
+            "mainClass": "Test",
+            "projectName": "CoffeeMachine"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Test",
+            "request": "launch",
+            "mainClass": "coffee.Test.Test",
+            "projectName": "CoffeeMachine"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - App",
+            "request": "launch",
+            "mainClass": "coffee.App",
+            "projectName": "CoffeeMachine"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - CoffeeMachine",
             "request": "launch",
             "mainClass": "coffee.CoffeeMachine",
